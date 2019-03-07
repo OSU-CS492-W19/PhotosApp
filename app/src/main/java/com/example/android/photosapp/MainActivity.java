@@ -2,11 +2,13 @@ package com.example.android.photosapp;
 
 import android.arch.lifecycle.Observer;
 import android.arch.lifecycle.ViewModelProviders;
+import android.content.Intent;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.support.v7.widget.StaggeredGridLayoutManager;
 import android.util.Log;
 import android.view.View;
 import android.widget.ProgressBar;
@@ -42,7 +44,9 @@ public class MainActivity extends AppCompatActivity implements FlickrPhotosAdapt
         mPhotosRV.setAdapter(mAdapter);
 
         mPhotosRV.setHasFixedSize(true);
-        mPhotosRV.setLayoutManager(new LinearLayoutManager(this));
+//        mPhotosRV.setLayoutManager(new LinearLayoutManager(this));
+        mPhotosRV.setLayoutManager(new StaggeredGridLayoutManager(NUM_PHOTO_COLUMNS,
+                StaggeredGridLayoutManager.VERTICAL));
 
         mViewModel = ViewModelProviders.of(this).get(FlickrExploreViewModel.class);
 
@@ -75,6 +79,8 @@ public class MainActivity extends AppCompatActivity implements FlickrPhotosAdapt
 
     @Override
     public void onPhotoClicked(FlickrPhoto photo) {
-        Log.d(TAG, "photo clicked: " + photo.title);
+//        Log.d(TAG, "photo clicked: " + photo.title);
+        Intent intent = new Intent(this, PhotoViewActivity.class);
+        startActivity(intent);
     }
 }

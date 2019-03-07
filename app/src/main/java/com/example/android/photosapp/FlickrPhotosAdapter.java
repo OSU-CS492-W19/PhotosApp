@@ -1,5 +1,7 @@
 package com.example.android.photosapp;
 
+import android.graphics.Color;
+import android.graphics.drawable.ColorDrawable;
 import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -8,6 +10,8 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.bumptech.glide.Glide;
+import com.bumptech.glide.request.RequestOptions;
 import com.example.android.photosapp.data.FlickrPhoto;
 
 import java.util.List;
@@ -69,11 +73,39 @@ public class FlickrPhotosAdapter extends RecyclerView.Adapter<FlickrPhotosAdapte
 
             String byOwner = mPhotoOwnerTV.getContext().getString(R.string.by_owner, photo.ownername);
             mPhotoOwnerTV.setText(byOwner);
+
+            Glide.with(mPhotoIV)
+                    .load(photo.url_m)
+                    .apply(RequestOptions.placeholderOf(
+                            new SizedColorDrawable(Color.WHITE, photo.width_m, photo.height_m)
+                    ))
+                    .into(mPhotoIV);
         }
 
         @Override
         public void onClick(View view) {
             mOnPhotoClickedListener.onPhotoClicked(mPhotos.get(getAdapterPosition()));
+        }
+    }
+
+    class SizedColorDrawable extends ColorDrawable {
+        int mWidth;
+        int mHeight;
+
+        public SizedColorDrawable(int color, int width, int height) {
+            super(color);
+            mWidth = width;
+            mHeight = height;
+        }
+
+        @Override
+        public int getIntrinsicWidth() {
+            return mWidth;
+        }
+
+        @Override
+        public int getIntrinsicHeight() {
+            return mHeight;
         }
     }
 }
