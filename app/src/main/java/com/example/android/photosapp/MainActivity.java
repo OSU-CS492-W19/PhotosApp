@@ -78,8 +78,8 @@ public class MainActivity extends AppCompatActivity implements FlickrPhotosAdapt
     }
 
     @Override
-    public void onPhotoClicked(FlickrPhoto photo) {
-//        Log.d(TAG, "photo clicked: " + photo.title);
+    public void onPhotoClicked(int photoIdx) {
+//        Log.d(TAG, "photo clicked: " + photoIdx);
         Intent intent = new Intent(this, PhotoViewActivity.class);
         startActivity(intent);
     }

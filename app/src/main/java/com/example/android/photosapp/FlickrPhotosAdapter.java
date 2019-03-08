@@ -21,7 +21,7 @@ public class FlickrPhotosAdapter extends RecyclerView.Adapter<FlickrPhotosAdapte
     private OnPhotoClickedListener mOnPhotoClickedListener;
 
     public interface OnPhotoClickedListener {
-        void onPhotoClicked(FlickrPhoto photo);
+        void onPhotoClicked(int photoIdx);
     }
 
     public FlickrPhotosAdapter(OnPhotoClickedListener onPhotoClickedListener) {
@@ -84,7 +84,7 @@ public class FlickrPhotosAdapter extends RecyclerView.Adapter<FlickrPhotosAdapte
 
         @Override
         public void onClick(View view) {
-            mOnPhotoClickedListener.onPhotoClicked(mPhotos.get(getAdapterPosition()));
+            mOnPhotoClickedListener.onPhotoClicked(getAdapterPosition());
         }
     }
 
