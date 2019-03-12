@@ -1,6 +1,11 @@
 package com.example.android.photosapp;
 
 import android.annotation.SuppressLint;
+import android.arch.lifecycle.Observer;
+import android.arch.lifecycle.ViewModelProviders;
+import android.content.Intent;
+import android.support.annotation.Nullable;
+import android.support.v4.view.ViewPager;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -10,11 +15,18 @@ import android.view.View;
 import android.view.MenuItem;
 import android.support.v4.app.NavUtils;
 
+import com.example.android.photosapp.data.FlickrPhoto;
+
+import java.util.List;
+
 /**
  * An example full-screen activity that shows and hides the system UI (i.e.
  * status bar and navigation/system bar) with user interaction.
  */
 public class PhotoViewActivity extends AppCompatActivity {
+
+    public static final String EXTRA_PHOTO_IDX = "photoIdx";
+
     /**
      * Whether or not the system UI should be auto-hidden after
      * {@link #AUTO_HIDE_DELAY_MILLIS} milliseconds.
@@ -83,6 +95,10 @@ public class PhotoViewActivity extends AppCompatActivity {
         }
     };
 
+    private ViewPager mPager;
+    private FlickrPhotoPagerAdapter mAdapter;
+    private int mCurrentPhotoIdx = 0;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -96,6 +112,23 @@ public class PhotoViewActivity extends AppCompatActivity {
         mVisible = true;
         mContentView = findViewById(R.id.fullscreen_content);
 
+        Intent intent = getIntent();
+        if (intent != null && intent.hasExtra(EXTRA_PHOTO_IDX)) {
+            mCurrentPhotoIdx = intent.getIntExtra(EXTRA_PHOTO_IDX, 0);
+        }
+
+        mAdapter = new FlickrPhotoPagerAdapter(getSupportFragmentManager());
+        mPager = findViewById(R.id.pager);
+        mPager.setAdapter(mAdapter);
+
+        FlickrExploreViewModel viewModel = ViewModelProviders.of(this).get(FlickrExploreViewModel.class);
+        viewModel.getExplorePhotos().observe(this, new Observer<List<FlickrPhoto>>() {
+            @Override
+            public void onChanged(@Nullable List<FlickrPhoto> photos) {
+                mAdapter.updatePhotos(photos);
+                mPager.setCurrentItem(mCurrentPhotoIdx);
+            }
+        });
 
         // Set up the user interaction to manually show or hide the system UI.
         mContentView.setOnClickListener(new View.OnClickListener() {

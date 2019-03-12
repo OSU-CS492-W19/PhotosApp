@@ -11,6 +11,8 @@ import java.util.concurrent.TimeUnit;
 
 public class FlickrExploreRepository implements FlickrExploreAsyncTask.Callback {
 
+    private static volatile FlickrExploreRepository INSTANCE;
+
     private static final String TAG = FlickrExploreRepository.class.getSimpleName();
     private static final long RELOAD_AFTER_MINUTES = 10;
 
@@ -19,7 +21,18 @@ public class FlickrExploreRepository implements FlickrExploreAsyncTask.Callback 
 
     private Date mLoadTimestamp;
 
-    public FlickrExploreRepository() {
+    public static FlickrExploreRepository getRepository() {
+        if (INSTANCE == null) {
+            synchronized (FlickrExploreRepository.class) {
+                if (INSTANCE == null) {
+                    INSTANCE = new FlickrExploreRepository();
+                }
+            }
+        }
+        return INSTANCE;
+    }
+
+    private FlickrExploreRepository() {
         mExplorePhotos = new MutableLiveData<>();
         mExplorePhotos.setValue(null);
 

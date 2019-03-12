@@ -81,6 +81,7 @@ public class MainActivity extends AppCompatActivity implements FlickrPhotosAdapt
     public void onPhotoClicked(int photoIdx) {
 //        Log.d(TAG, "photo clicked: " + photoIdx);
         Intent intent = new Intent(this, PhotoViewActivity.class);
+        intent.putExtra(PhotoViewActivity.EXTRA_PHOTO_IDX, photoIdx);
         startActivity(intent);
     }
 }

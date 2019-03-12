@@ -15,7 +15,7 @@ public class FlickrExploreViewModel extends ViewModel {
     private FlickrExploreRepository mRepository;
 
     public FlickrExploreViewModel() {
-        mRepository = new FlickrExploreRepository();
+        mRepository = FlickrExploreRepository.getRepository();
         mExplorePhotos = mRepository.getExplorePhotos();
         mLoadingStatus = mRepository.getLoadingStatus();
     }
